@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            com.maxmartin.github.theme.GithubTheme {
+            GithubTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -41,7 +41,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    com.maxmartin.github.theme.GithubTheme {
+    GithubTheme {
         Greeting("Android")
     }
 }
