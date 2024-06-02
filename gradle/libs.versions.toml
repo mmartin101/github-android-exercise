@@ -14,8 +14,10 @@ appcompat = "1.6.1"
 material = "1.12.0"
 retrofit = "2.11.0"
 moshi = "1.15.1"
+okhttp = "4.12.0"
 coil = "2.6.0"
 koin = "3.5.6"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +41,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 # retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+# OkHttp
+okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
 # Moshi
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
@@ -47,11 +53,13 @@ coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 # koin
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 
 [bundles]
 compose = ["androidx-activity-compose", "androidx-compose-ui", "androidx-compose-ui-graphics", "androidx-compose-material3", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview"]
 retrofit = ["retrofit", "retrofit-converter-moshi"]
+okhttp = ["okhttp", "okhttp-logging-interceptor"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
