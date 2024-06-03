@@ -1,9 +1,8 @@
 package com.maxmartin.github.user_list
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,14 +73,17 @@ fun UserListItem(listUser: ListUser, preview: Boolean = false) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (preview) {
-            Box(modifier = Modifier
-                .size(100.dp)
-                .background(color = Color.Cyan))
+            Image(
+                modifier = Modifier.size(100.dp),
+                painter = painterResource(id = R.drawable.baseline_person_24),
+                contentDescription = ""
+            )
         } else {
             AsyncImage(
                 modifier = Modifier.size(100.dp),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(listUser.avatarUrl)
+                    .placeholder(R.drawable.baseline_person_24)
                     .crossfade(true)
                     .build(),
                 contentDescription = listUser.username
@@ -108,11 +110,13 @@ fun UserListPreview() {
 
     val listUsers = mutableListOf<ListUser>()
     for (i in 0..25) {
-        listUsers.add(ListUser(
-            id = 1,
-            username = "mmartin101",
-            avatarUrl = ""
-        ))
+        listUsers.add(
+            ListUser(
+                id = 1,
+                username = "mmartin101",
+                avatarUrl = ""
+            )
+        )
     }
     Scaffold {
         UserList(loading = false, listUsers = listUsers, preview = true)
