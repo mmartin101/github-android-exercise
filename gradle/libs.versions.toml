@@ -7,6 +7,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
+lifecycleRuntimeCompose = "2.7.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 paging = "3.3.0"
@@ -25,6 +26,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -49,7 +51,7 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 # coil
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 # koin
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android" }

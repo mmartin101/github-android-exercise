@@ -7,8 +7,8 @@ import retrofit2.http.GET
 
 interface GithubAPI {
     @GET("users")
-    fun users(): Response<List<GithubUserListUser>>
+    suspend fun users(): Response<List<GithubUserListUser>>
 
     @GET("users/{username}")
-    fun users(username: String): Response<GithubUser>
+    suspend fun users(username: String): Response<GithubUser>
 }

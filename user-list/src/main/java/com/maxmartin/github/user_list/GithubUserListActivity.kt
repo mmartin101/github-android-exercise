@@ -13,12 +13,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
 import com.maxmartin.github.theme.GithubTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class GithubUserListActivity : ComponentActivity() {
+    private val viewModel: GithubUserListViewModel by viewModel()
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getUsers()
         setContent {
             GithubTheme {
                 Scaffold(
@@ -28,11 +32,12 @@ class GithubUserListActivity : ComponentActivity() {
                             title = { Text("Github Users") },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primary
-                            )
+                            ),
+                            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                         )
                     },
-                    content = { paddingValues ->
-                        Text(text = "testing", modifier = Modifier.padding(paddingValues))
+                    content = { padding ->
+                        UserListHost(modifier = Modifier.padding(padding), viewModel = viewModel)
                     }
                 )
             }

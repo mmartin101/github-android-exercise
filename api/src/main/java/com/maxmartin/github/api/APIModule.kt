@@ -19,6 +19,7 @@ val apiModule = module {
             .addConverterFactory(MoshiConverterFactory.create())
             .client(get())
             .baseUrl("https://api.github.com/")
+            .build()
     }
     single { get<Retrofit>().create(GithubAPI::class.java) }
 }

@@ -50,7 +50,8 @@ class GithubUserRepositoryImpl(
         this?.map { githubListUser ->
             ListUser(
                 id = githubListUser.id,
-                username = githubListUser.login
+                username = githubListUser.login,
+                avatarUrl = githubListUser.avatar_url
             )
         } ?: emptyList()
 

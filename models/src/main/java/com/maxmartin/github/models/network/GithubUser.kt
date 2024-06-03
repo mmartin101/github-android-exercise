@@ -1,5 +1,8 @@
 package com.maxmartin.github.models.network
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class GithubUser(
     val login: String,
     val id: Long,
