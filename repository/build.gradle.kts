@@ -33,8 +33,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":api"))
+    implementation(project(":models"))
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
+    implementation(libs.retrofit)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
