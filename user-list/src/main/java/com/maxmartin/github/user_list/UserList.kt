@@ -2,25 +2,32 @@ package com.maxmartin.github.user_list
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,8 +51,7 @@ fun UserListHost(viewModel: GithubUserListViewModel, modifier: Modifier) {
 fun UserList(
     modifier: Modifier = Modifier,
     loading: Boolean,
-    listUsers: List<ListUser>,
-    preview: Boolean = false
+    listUsers: List<ListUser>
 ) {
     if (loading) {
         Column(
@@ -56,41 +62,54 @@ fun UserList(
             CircularProgressIndicator()
         }
     } else {
-        LazyColumn(modifier = modifier) {
+        LazyVerticalGrid(modifier = modifier, columns = GridCells.Fixed(2)) {
             items(listUsers) { user ->
-                UserListItem(listUser = user, preview = preview)
+                UserListItem(listUser = user, onClick = {})
             }
         }
     }
 }
 
 @Composable
-fun UserListItem(listUser: ListUser, preview: Boolean = false) {
-    Row(
+fun UserListItem(listUser: ListUser, onClick: (String) -> Unit) {
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),
-        verticalAlignment = Alignment.CenterVertically
+        onClick = { onClick.invoke(listUser.username) }
     ) {
-        if (preview) {
+        val imageModifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.CenterHorizontally)
+        if (LocalView.current.isInEditMode) {
             Image(
-                modifier = Modifier.size(100.dp),
+                modifier = imageModifier
+                    .height(200.dp)
+                    .background(Color.LightGray),
                 painter = painterResource(id = R.drawable.baseline_person_24),
                 contentDescription = ""
             )
         } else {
             AsyncImage(
-                modifier = Modifier.size(100.dp),
+                modifier = imageModifier,
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(listUser.avatarUrl)
                     .placeholder(R.drawable.baseline_person_24)
                     .crossfade(true)
                     .build(),
+                contentScale = ContentScale.FillWidth,
                 contentDescription = listUser.username
             )
         }
-        Spacer(modifier = Modifier.size(30.dp))
-        Text(text = listUser.username, fontSize = 18.sp)
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(
+            modifier = Modifier
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(10.dp),
+            text = listUser.username,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        )
     }
 }
 
@@ -119,7 +138,7 @@ fun UserListPreview() {
         )
     }
     Scaffold {
-        UserList(loading = false, listUsers = listUsers, preview = true)
+        UserList(loading = false, listUsers = listUsers)
     }
 }
 
@@ -132,6 +151,6 @@ fun UserListItemPreview() {
             username = "mmartin101",
             avatarUrl = ""
         ),
-        preview = true
+        onClick = {}
     )
 }

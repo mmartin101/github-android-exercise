@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.maxmartin.github.theme.GithubTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,9 +30,16 @@ class GithubUserListActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         TopAppBar(
-                            title = { Text("Github Users") },
+                            title = {
+                                Text(
+                                    text = "Github User Profiles",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primary
+
                             ),
                             scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                         )
