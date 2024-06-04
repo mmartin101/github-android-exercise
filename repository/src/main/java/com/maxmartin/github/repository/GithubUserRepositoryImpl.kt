@@ -1,38 +1,33 @@
 package com.maxmartin.github.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.maxmartin.github.api.GithubAPI
 import com.maxmartin.github.models.ListUser
 import com.maxmartin.github.models.User
-import com.maxmartin.github.models.network.GithubUser
-import com.maxmartin.github.models.network.GithubUserListUser
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
+import timber.log.Timber
 
 class GithubUserRepositoryImpl(
     private val githubAPI: GithubAPI,
     private val dispatcher: CoroutineDispatcher
 ) : GithubUserRepository {
-    override suspend fun getUsers(): Result<List<ListUser>> {
-        return withContext(dispatcher) {
-            try {
-                val response = githubAPI.users()
-                if (response.isSuccessful) {
-                    Result.success(response.body().toListUsers())
-                } else {
-                    Result.failure(response.errorBody().toException())
-                }
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
-        }
+    override fun getUsers(): Flow<PagingData<ListUser>> {
+        return Pager(
+            config = PagingConfig(30),
+            pagingSourceFactory = { UsersPagingSource(api = githubAPI) }
+        ).flow.flowOn(dispatcher)
     }
 
     override suspend fun getUser(username: String): Result<User> {
         return withContext(dispatcher) {
             try {
                 val response = githubAPI.users(username)
-                // TODO: is there a better way to handle empty response body?
                 val user = response.body()?.toUser()
                 if (response.isSuccessful && user != null) {
                     Result.success(user)
@@ -40,23 +35,11 @@ class GithubUserRepositoryImpl(
                     Result.failure(response.errorBody().toException())
                 }
             } catch (e: Exception) {
+                Timber.e(e)
                 Result.failure(e)
             }
         }
     }
 
     private fun ResponseBody?.toException(): Exception = Exception(toString())
-    private fun List<GithubUserListUser>?.toListUsers(): List<ListUser> =
-        this?.map { githubListUser ->
-            ListUser(
-                id = githubListUser.id,
-                username = githubListUser.login,
-                avatarUrl = githubListUser.avatar_url
-            )
-        } ?: emptyList()
-
-    private fun GithubUser.toUser(): User = User(
-        id = id,
-        username = login
-    )
 }

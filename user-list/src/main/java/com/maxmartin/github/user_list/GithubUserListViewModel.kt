@@ -2,8 +2,11 @@ package com.maxmartin.github.user_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import com.maxmartin.github.models.ListUser
 import com.maxmartin.github.repository.GithubUserRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -14,25 +17,21 @@ class GithubUserListViewModel(
     private val repository: GithubUserRepository,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val _state = MutableStateFlow(UserListState())
-    val state = _state.asStateFlow()
+    private val _userState = MutableStateFlow(UserState(false))
+    val userState = _userState.asStateFlow()
 
-    fun getUsers() {
+    fun getUsers(): Flow<PagingData<ListUser>> = repository.getUsers()
+
+    fun getUser(username: String) {
         viewModelScope.launch {
             withContext(dispatcher) {
-                val result = repository.getUsers()
-                if (result.isSuccess) {
-                    _state.value = _state.value.copy(
-                        loading = false,
-                        userList = result.getOrDefault(emptyList())
+                try {
+                    val user = repository.getUser(username)
+                    _userState.value = userState.value.copy(
+                        user = user.getOrNull()
                     )
-                } else {
-                    // TODO should we just use the exception and display a pre-canned string in the ui?
-                    Timber.e(result.exceptionOrNull())
-                    _state.value = _state.value.copy(
-                        loading = false,
-                        error = result.exceptionOrNull()?.message
-                    )
+                } catch (e: Exception) {
+                    Timber.e(e)
                 }
             }
         }

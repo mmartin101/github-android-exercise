@@ -1,6 +1,5 @@
 package com.maxmartin.github.user_list
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,21 +13,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.maxmartin.github.theme.GithubTheme
-import kotlinx.serialization.Serializable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class GithubUserListActivity : ComponentActivity() {
+class UserProfileActivity: ComponentActivity() {
     private val viewModel: GithubUserListViewModel by viewModel()
-
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getUsers()
+        val username = intent.getStringExtra("username")
+        username?.let { viewModel.getUser(username) } ?: finish()
         setContent {
             GithubTheme {
                 Scaffold(
@@ -37,7 +31,7 @@ class GithubUserListActivity : ComponentActivity() {
                         TopAppBar(
                             title = {
                                 Text(
-                                    text = "Github User Profiles",
+                                    text = "Github User Profile",
                                     style = MaterialTheme.typography.titleLarge,
                                     color = if (isSystemInDarkTheme()) {
                                         MaterialTheme.colorScheme.background
@@ -48,21 +42,14 @@ class GithubUserListActivity : ComponentActivity() {
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primary
-
                             ),
                             scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
                         )
                     },
                     content = { padding ->
-                        UserListHost(
+                        UserProfile(
                             modifier = Modifier.padding(padding),
-                            viewModel = viewModel,
-                            onClick = { username ->
-                                startActivity(Intent(baseContext, UserProfileActivity::class.java)
-                                    .putExtra("username", username))
-
-
-                            }
+                            viewModel = viewModel
                         )
                     }
                 )
@@ -70,9 +57,3 @@ class GithubUserListActivity : ComponentActivity() {
         }
     }
 }
-
-@Serializable
-object ScreenA
-
-@Serializable
-object ScreenB
