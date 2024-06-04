@@ -18,10 +18,7 @@ following modules:
 - models
 - theme
 - user-list
-- user-profile
 - repository
-
-`user-list` & `user-profile` will each have their own ui, state classes, and ViewModels
 
 ### UI
 
